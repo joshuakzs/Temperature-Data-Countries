@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS sg_station (
     station_id SERIAL,
     station_name VARCHAR(50),
     latitude NUMERIC(13,7),
-    longitude NUMERIC(13,7),
-)
+    longitude NUMERIC(13,7)
+);
         
