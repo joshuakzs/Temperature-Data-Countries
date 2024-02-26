@@ -8,11 +8,14 @@ Project Overview:
 3. Initialize airflow metadata database
 ..* airflow db init
 4. Connect to local Postgres SQL database 
-5. Using Airflow scheduler, the scripts will collect data and put them in our database tables.
-6. The Airflow DAG will be configured such that if data collected is unsuccessful, an email will be sent to me.
+5. Using Airflow scheduler, the scripts will collect data and put them in our database tables. Using selenium or API, data will be collected hourly from the following countries:
+..* Singapore
+..* Malaysia
+7. The Airflow DAG will be configured such that if data collected is unsuccessful, an email will be sent to me.
 
 Possible future expansion of the project:
 1. Scheduled Data Cleaning of each countries' data
 2. Scheduled Merging the different countries' data
 3. Scheduled Update of Data Visualisation of data
+4. Adding more countries
 
