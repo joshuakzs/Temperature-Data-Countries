@@ -27,14 +27,13 @@ if json_dict["api_info"]["status"] == "healthy":
             longitude = dict["location"]["longitude"]
             return [device_id,station_name,latitude,longitude]
         return list(map(helper, array))
-    df_stations = pd.DataFrame(station_dict_to_array(station_array),columns=["device_id","station_name","latitude","longitude"])
-    #Combine dfs and do a bit of cleaning
-    df_merged = df_readings.merge(df_stations,how = "inner",left_on = "station_id",right_on="device_id")
-    df_merged["timestamp"] = pd.to_datetime(df_merged["timestamp"],utc=False).dt.tz_convert("Singapore")
-    df_merged["date_queried"] = df_merged["timestamp"].dt.date
-    df_merged["time_queried"] = df_merged["timestamp"].dt.time
-    df_final = df_merged[["station_id","station_name","value","latitude","longitude","date_queried","time_queried"]].rename(columns = {"value":"temperature"})
-    print(f"Number of new entries: {df_final.shape[0]}")
+    df_stations = pd.DataFrame(station_dict_to_array(station_array),columns=["station_id","station_name","latitude","longitude"])
+    #Do a bit of cleaning
+    df_readings["timestamp"] = pd.to_datetime(df_readings["timestamp"],utc=False).dt.tz_convert("Singapore")
+    df_readings["date_queried"] = df_readings["timestamp"].dt.date
+    df_readings["time_queried"] = df_readings["timestamp"].dt.time
+    df_readings = df_readings[["station_id","value","date_queried","time_queried"]].rename(columns = {"value":"temperature"})
+    print(f"Number of new temperature entries: {df_readings.shape[0]}")
 
     #Load data to PostgresSQL
     conn = psycopg2.connect(host="localhost",
@@ -61,7 +60,8 @@ if json_dict["api_info"]["status"] == "healthy":
         print("the dataframe is inserted")
         cursor.close()
 
-    execute_values(conn, df_final, 'raw_sg_data')
+    execute_values(conn, df_readings, 'raw_sg_data')
+    execute_values(conn, df_stations, 'sg_station')
 else:
     #Query failed
     print("API request brought in 'unhealthy' data.")
