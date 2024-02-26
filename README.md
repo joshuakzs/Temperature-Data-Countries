@@ -3,7 +3,7 @@ Project Overview:
 
 1. Create a Postgres SQL database, and create tables to collect data.
 2. Using a Python VE, install python packages and apache airflow
-   * numpy, pandas, requests, selenium, seaborn
+   * numpy, pandas, requests, selenium, seaborn, psycopg2
    * pip install "apache-airflow[celery]==2.8.1" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.8.1/constraints-3.10.txt"
 4. Initialize airflow metadata database
    * airflow db init
